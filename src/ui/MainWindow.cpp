@@ -231,7 +231,7 @@ void MainWindow::restoreHistorySnapshot(Snapshot snapshot){
         selectionScrollPoint_=scrollPoint;if(scrolling&&project->document)selectionScrollTimer_->start();}
     refresh();
 }
-void MainWindow::finishOpacityEdit(){auto*owner=opacityOwner_;opacityOwner_=nullptr;if(!owner)return;try{owner->history.end(owner->document,owner->active);}catch(…){if(auto snapshot=owner->history.cancel()){owner->document=std::move(snapshot->document);owner->active=std::move(snapshot->activeLayer);}throw;}}
+void MainWindow::finishOpacityEdit(){auto*owner=opacityOwner_;opacityOwner_=nullptr;if(!owner)return;try{owner->history.end(owner->document,owner->active);}catch(...){if(auto snapshot=owner->history.cancel()){owner->document=std::move(snapshot->document);owner->active=std::move(snapshot->activeLayer);}throw;}}
 // A double-click reaches the track after the first click's press already committed a snap.
 // Undo that step through the Undo path so the reset becomes the only history entry.
 void MainWindow::withdrawOpacityPress(){
@@ -252,7 +252,7 @@ void MainWindow::selectTool(Tool value){
     if(auto* box=findChild<QComboBox*>("cropRatioChoice")){const QSignalBlocker block(box);box->setCurrentText(cropRatioChoice_);}
     refresh(false,false);
 }
-void MainWindow::edit(const char*name,const std::function<void(Document&)>&fn,bool rebuildLayers){stopGifPlayback();auto*p=current();if(!p||!p->document||p->importing||p->projectBusy)return;p->history.begin(name,p->document,p->active);try{fn(*p->document);validateDocument(*p->document);p->history.end(p->document,p->active);}catch(…){if(auto s=p->history.cancel()){p->document=std::move(s->document);p->active=std::move(s->activeLayer);}throw;}refresh(true,rebuildLayers);}
+void MainWindow::edit(const char*name,const std::function<void(Document&)>&fn,bool rebuildLayers){stopGifPlayback();auto*p=current();if(!p||!p->document||p->importing||p->projectBusy)return;p->history.begin(name,p->document,p->active);try{fn(*p->document);validateDocument(*p->document);p->history.end(p->document,p->active);}catch(...){if(auto s=p->history.cancel()){p->document=std::move(s->document);p->active=std::move(s->activeLayer);}throw;}refresh(true,rebuildLayers);}
 void MainWindow::setCanvasOnly(bool enabled){
     // A held canvas gesture owns mouse capture and focus, so hiding chrome now would interrupt it.
     if(enabled!=canvasOnly_.has_value()&&!(canvas()&&canvas()->pointerHeld())){
