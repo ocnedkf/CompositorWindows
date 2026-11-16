@@ -201,7 +201,7 @@ for (const auto& entry : entries) {
         rail->addTool(button);
     }
 }
-autobrushKey=new QAction("Brush (B)",this);bindCommand(brushKey,"Tools","Brush (B)",[this]{selectTool(Tool::Brush);});addAction(brushKey);
+auto*brushKey=new QAction("Brush (B)",this);bindCommand(brushKey,"Tools","Brush (B)",[this]{selectTool(Tool::Brush);});addAction(brushKey);
 setupPaletteControls(rail);
 rail->setPalette(paletteSwatches_);
 setupGifTimeline();
